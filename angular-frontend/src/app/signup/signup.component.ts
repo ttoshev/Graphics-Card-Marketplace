@@ -13,7 +13,9 @@ export class SignupComponent implements OnInit {
   ngOnInit() {
   }
 
+//DOESNT RETURN PASSWORD
   onSubmit(formData) {
+    console.log(formData)
     if (formData.valid) {
       console.log(formData.value);
       this.authService.emailSignup(

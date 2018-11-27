@@ -1,13 +1,16 @@
-<div class="form-container">
-    <a routerLink="/login" id="goback">Login</a>
-    <h2>Sign Up</h2>
-    <form #formData='ngForm' (ngSubmit)="onSubmit(formData)">
-        <input type="text" placeholder="Email address..." (ngModel)="email" name="email" class="input-txt" required>
-        <div>
-            <span>Password: </span><input type="password" placeholder="Password..." (ngModel)="password" class="input.txt" required>
-        </div>
-        <br>
-        <button type="submit" [disabled]="!formData.valid" class="auth-btn">Create Account</button>
-    </form>
+<div>
+    <h1 class="myHeader">Cards, Cards, Cards</h1>
 </div>
-        
+
+<body>
+    <div class="form-container">
+        <button type="submit" routerLink="/login" class="back-btn"><span class="glyphicon glyphicon-chevron-left"></span></button>
+        <h2>Sign Up</h2>
+        <form #formData='ngForm' (ngSubmit)="onSubmit(formData)">
+            <span>E-mail: </span><input type="text" placeholder="Email address..." (ngModel)="email" name="email" class="input-txt" required>
+            <span>Password: </span><input type="password" placeholder="Password..." (ngModel)="password" class="input.txt" name ="password" required>
+            <br>
+            <button type="submit" [disabled]="!formData.valid" class="auth-btn">Create Account</button>
+        </form>
+    </div>
+</body>   

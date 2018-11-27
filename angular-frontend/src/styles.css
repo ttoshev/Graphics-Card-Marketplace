@@ -1,5 +1,5 @@
 body {
-    background-image:url("./images/toronto-wallpaper.jpg"); 
+    background-image:url("./images/1080.jpg"); 
     background-repeat:no-repeat; 
     background-attachment: scroll; 
     background-size:cover;
@@ -10,11 +10,17 @@ body {
 }
 
 .form-container {
+    background: white;
     padding: 2em;
     width: 500px;
     position: fixed;
-    left: 45%;
+    left: 50%;
     margin-left: -250px;
+}
+
+.myHeader{
+    padding-top: 0px;
+    text-align:center;
 }
 
 button {

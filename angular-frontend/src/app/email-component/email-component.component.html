@@ -1,11 +1,17 @@
-<div class="form-container">
-    <button type="submit" routerLink="/login" class="back-btn"><span class="glyphicon glyphicon-chevron-left"></span></button>
-    <h2>Login</h2>
-    <form #formData='ngForm' (ngSubmit)='onSubmit(formData)'>
-        <input type="text" placeholder="Email address..." (ngModel)="email" class="input-txt" required>
-        <input type="text" placeholder="Password..." (ngModel)="password" name="password" class="input-txt" required>
-        <button type="submit" [disabled]="!formData.valid" class="auth-btn">Log In</button>
-    </form>
-    
-    <a routerLink="/signup" routerLinkActive="active" class="create-account-txt">No account? <strong>Create one here..</strong></a>
-</div>        
+<div>
+    <h1 class="myHeader">Cards, Cards, Cards</h1>
+</div>
+
+<body>
+    <div class="form-container">
+        <button type="submit" routerLink="/login" class="back-btn"><span class="glyphicon glyphicon-chevron-left"></span></button>
+        <h2>Login</h2>
+        <form #formData='ngForm' (ngSubmit)='onSubmit(formData)'>
+            <input type="text" placeholder="Email address..." (ngModel)="email" name="email" class="input-txt" required>
+            <input type="text" type="password" placeholder="Password..." (ngModel)="password" name="password" class="input-txt" required>
+            <button type="submit" [disabled]="!formData.valid" class="auth-btn">Log In</button>
+        </form>
+        
+        <a routerLink="/signup" routerLinkActive="active" class="create-account-txt">No account? <strong>Create one here..</strong></a>
+    </div>      
+</body>

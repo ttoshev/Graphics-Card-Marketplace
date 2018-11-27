@@ -1,3 +1,10 @@
-<p>
-  profile-component works!
-</p>
+<ng-template [ngIf]="this.authService.isAuthenticated()">
+  <div>
+      <h1 class="myHeader">Cards, Cards, Cards</h1>
+  </div>
+  
+  <p>
+    Welcome, {{username}}!
+  </p>
+  <button class="signout" (click)="signOut()">Sign Out</button>
+</ng-template>
