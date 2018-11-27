@@ -25,7 +25,15 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit() {
   }
-
+  
+  loginRedirect(){
+    this.router.navigate(['/login']);
+  }
+  
+  showAboutUs(){
+    return;
+  }
+  
   signOut() {
     this.authService.logout();
   }

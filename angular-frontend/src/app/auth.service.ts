@@ -43,7 +43,10 @@ export class AuthService {
      * Function Returns true if the current user has verified their email
      **/ 
     isAuthenticated(): boolean {
-      return this.currentUser.emailVerified; 
+      if(this.currentUser)
+        return this.currentUser.emailVerified;
+      else
+        return false;
     }
    
     /**
@@ -90,7 +93,7 @@ export class AuthService {
       console.log("auth.service.ts.login --> Has the user been varified? "+this.currentUser.emailVerified);
 
       // verified user login
-      if (this.currentUser.emailVerified)
+      if (this.isAuthenticated())
         this.router.navigateByUrl('/profile');
       // unverified user attempted login
       else{

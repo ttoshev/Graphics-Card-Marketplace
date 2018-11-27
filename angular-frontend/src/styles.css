@@ -18,6 +18,12 @@ body {
     margin-left: -250px;
 }
 
+.form-container {
+    background: white;
+    padding: 1em;
+    margin-left: 20px;
+}
+
 .myHeader{
     padding-top: 0px;
     text-align:center;
