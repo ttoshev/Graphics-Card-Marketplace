@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { AngularFireAuth } from 'angularfire2/auth';
 import * as firebase from 'firebase/app';
 
+import { ToastrService } from 'ngx-toastr';
+
 import { Observable } from 'rxjs';
 import 'rxjs/add/operator/switchMap';
 
@@ -12,11 +14,18 @@ import 'rxjs/add/operator/switchMap';
 export class AuthService {
   private authState: Observable<firebase.User>;
   public currentUser: firebase.User = null;
-
-
+  
+  /**
+   * Inject afAuth for Firebase user authentication, router for navigation of anuglar pages
+   * and tostr for notifying the user
+   * @params: afAuth
+   * @params: router
+   * @params: tostr
+   **/ 
   constructor(
     private afAuth: AngularFireAuth,
-    private router: Router
+    private router: Router,
+    private tostr: ToastrService
     ){
       // get the authentication state
       this.authState = this.afAuth.authState;
@@ -57,7 +66,8 @@ export class AuthService {
       
       // Email sent.
       .then(function()  {
-        alert('Email sent. Please verify it before logging in.');
+        this.tostr.success('Verification Email Sent!', 'User Register');
+        //alert('Email sent. Please verify it before logging in.');
       })
       
       // An error happened
@@ -73,18 +83,19 @@ export class AuthService {
       return this.afAuth.auth.signInWithPopup(provider);
     }
   
+    /**
+     * log out of the current user, show them the 'profile' page, unauthenticated
+     **/
     logout() {
       this.afAuth.auth.signOut().then(() => {
-        this.router.navigate(['/']);
+        this.router.navigate(['/profile']);
       });
     }
   
   /**
-   * 
    * "Back end" calls - Firebase's Authentication service allows for login operation without the need for a back end api
    * Source: https://www.dunebook.com/how-to-set-up-authentication-in-angular-5-with-firebase-firestore/
    * User for google login call, email/password login call, signup (email/password)
-   * 
    **/
   login(email: string, password: string) {
     
@@ -99,11 +110,15 @@ export class AuthService {
       else{
         console.log('Re-sending verification e-mail...')
         this.sendVerificationEmail();
-        alert('E-mail not verified! Resent verification, please check your email.');
+        this.tostr.warning('Email not verified! Resending', 'User Register');
+        //alert('E-mail not verified! Resent verification, please check your email.');
       }
     })
     
     .catch(err => {
+      console.log('sending tostr...')
+      this.tostr.warning(err.message, 'User Login')
+      alert(err.message);
       console.log('Something went wrong: ', err.message);
     });
     
@@ -119,6 +134,7 @@ export class AuthService {
     })
     
     .catch(error => {
+      alert(error);
       console.log('Something went wrong: ', error);
     });
     
@@ -128,13 +144,14 @@ export class AuthService {
     
     this.afAuth.auth.createUserWithEmailAndPassword(email, password)
     .then(message => {
-      console.log('Sucess', message);
+      console.log('Success', message);
       this.sendVerificationEmail();
       this.router.navigateByUrl('/login');
     })
     
     .catch(error => {
-      alert(error);
+      this.tostr.warning(error, 'User Register');
+      //alert(error);
       console.log('Something went wrong: ', error);
     });
     

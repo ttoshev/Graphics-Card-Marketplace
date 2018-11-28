@@ -7,21 +7,26 @@ import { AuthService } from '../auth.service';
   styleUrls: ['./email-component.component.css']
 })
 export class EmailComponent implements OnInit {
-
+  
+  /**
+   * Inject authService for user authentication
+   * @params: authService
+   **/ 
   constructor(private authService: AuthService) { }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
   
+  /**
+   * Login via email, calls authService login with user inputted email and password
+   * @params: formData
+   **/
   onSubmit(formData) {
-    //check if valid email address format
+    
+    // check if the form has been filled out correctly
     if (formData.valid) {
-      console.log(formData.value);
-      this.authService.login(
-        formData.value.email,
-        formData.value.password
-      );
+      this.authService.login(formData.value.email,formData.value.password);
     }
+    
   }
 
 }

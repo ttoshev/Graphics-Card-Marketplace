@@ -1,3 +1,8 @@
 .bgnd{
     background-color: white;
 }
+
+.dropdown-menu dropdown-menu right{
+    margin-left:auto;
+    margin-right:10px;
+}

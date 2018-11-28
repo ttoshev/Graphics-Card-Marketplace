@@ -9,6 +9,18 @@ body {
     font-family: 'Allerta Stencil';
 }
 
+input.ng-invalid.ng-dirty{
+    border: 1px solid red;
+}
+
+button:hover,btn:hover{
+    cursor: pointer;
+}
+
+button.ng-invalid.ng-dirty{
+    
+}
+
 .form-container {
     background: white;
     padding: 2em;
@@ -18,10 +30,12 @@ body {
     margin-left: -250px;
 }
 
-.form-container {
+.catalog-container{
     background: white;
     padding: 1em;
     margin-left: 20px;
+    margin-right: 20px;
+
 }
 
 .myHeader{
