@@ -16,17 +16,22 @@ export class QueryService {
   constructor(private http : HttpClient) {
     
   }
+  
   getItems(){
     return this.http.get('/api/home');
   }
   
   //post request
-  addItem(_product : string){
+  addItem(formData){
     let theItem = {
-      'itemName':_product
+      'itemName': formData.itemName;
+      'itemPrice': formData.itemPrice,
+      'itemQuantity': formData.itemQuantity,
+      'imageLink': formData.imageLink
     }
     console.log(theItem);
-    return this.http.post('/api/add/'+_product, this._options);
+    //TODO - modify this
+    return this.http.post('/api/add/'+formData.itemName+'/'+formData.itemPrice+'/'+formData.itemQuantity+'/'+formData.imageLink,theItem, this._options);
   }
   
   //post request

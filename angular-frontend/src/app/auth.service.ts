@@ -17,10 +17,9 @@ export class AuthService {
   
   /**
    * Inject afAuth for Firebase user authentication, router for navigation of anuglar pages
-   * and tostr for notifying the user
    * @params: afAuth
    * @params: router
-   * @params: tostr
+   * @params: toastr
    **/ 
   constructor(
     private afAuth: AngularFireAuth,
@@ -62,16 +61,17 @@ export class AuthService {
      * Function sends a verification email to the current user
      **/ 
     sendVerificationEmail(){
+      //if(this.currentUser)
       this.currentUser.sendEmailVerification()
       
       // Email sent.
       .then(function()  {
-        this.tostr.success('Verification Email Sent!', 'User Register');
-        //alert('Email sent. Please verify it before logging in.');
+        this.tostr.info('Verification Email Sent!', 'User Register');
       })
       
       // An error happened
       .catch(function(error) {
+        this.tostr.info('Verification Email Sent!', 'Alert');
         console.log(error);
       });
     }
@@ -101,26 +101,25 @@ export class AuthService {
     
     this.afAuth.auth.signInWithEmailAndPassword(email, password)
     .then(message => {
-      console.log("auth.service.ts.login --> Has the user been varified? "+this.currentUser.emailVerified);
-
-      // verified user login
-      if (this.isAuthenticated())
-        this.router.navigateByUrl('/profile');
-      // unverified user attempted login
-      else{
-        console.log('Re-sending verification e-mail...')
-        this.sendVerificationEmail();
-        this.tostr.warning('Email not verified! Resending', 'User Register');
-        //alert('E-mail not verified! Resent verification, please check your email.');
-      }
+      //console.log("auth.service.ts.login --> Has the user been varified? "+this.currentUser.emailVerified);
     })
-    
     .catch(err => {
-      console.log('sending tostr...')
-      this.tostr.warning(err.message, 'User Login')
-      alert(err.message);
+      this.tostr.warning(err.message, 'Oops...');
       console.log('Something went wrong: ', err.message);
     });
+    
+    // verified user login
+    if (this.isAuthenticated()){
+      this.tostr.success('Logging in...', 'Success!')
+      this.router.navigateByUrl('/profile');
+    }
+    // unverified user attempted login
+    else{
+      if(this.currentUser){
+        this.sendVerificationEmail();
+        this.tostr.warning('Email not verified! Resending', 'Oops...');
+      }
+    }
     
   }
   
@@ -150,7 +149,7 @@ export class AuthService {
     })
     
     .catch(error => {
-      this.tostr.warning(error, 'User Register');
+      this.tostr.warning(error.message, 'Oops...');
       //alert(error);
       console.log('Something went wrong: ', error);
     });

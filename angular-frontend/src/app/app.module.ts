@@ -1,7 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { AuthService } from './auth.service'
+import { AuthService } from './auth.service';
+import { CommonModule } from '@angular/common';
 
 import { HttpClientModule } from '@angular/common/http'
 import { HttpModule } from '@angular/http';
@@ -18,8 +19,8 @@ import { EmailComponent } from './email-component/email-component.component';
 import { ProfileComponent } from './profile-component/profile-component.component';
 import { ItemsComponent } from './items/items.component';
 
-import { ToastrModule } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
 
 const firebaseConfig = {
   apiKey: "AIzaSyBrb05-WjyJQxTDkZbFQzB1p2nVXMyIAI8",
@@ -48,10 +49,13 @@ const firebaseConfig = {
     AngularFireAuthModule,
     HttpModule,
     HttpClientModule,
-    ToastrModule.forRoot(),
-    BrowserAnimationsModule
+    BrowserModule,
+    BrowserAnimationsModule,
+    CommonModule,
+    ToastrModule.forRoot()
   ],
   providers: [AuthService],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule { 
+}

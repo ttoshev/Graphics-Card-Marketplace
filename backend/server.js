@@ -18,7 +18,7 @@ router.use(function(req, res, next) {
 
 
 // Connect to Mlab DB
-MongoClient.connect('mongodb://ttoshev:banana24@ds149593.mlab.com:49593/mystore', (err, client)=> { 
+MongoClient.connect('mongodb://ttoshev:banana24@ds117834.mlab.com:17834/cardshop', (err, client)=> { 
     useNewUrlParser: true;
     if (err) return console.log(err);
     
@@ -44,20 +44,26 @@ router.get('/home', (req, res) => {
 });
 
 //Add an item
-router.post('/add/:itemName', (req, res) => {
+router.post('/add/:formData', (req, res) => {
     
     //remove malicious html input
-    var name        = req.params.itemName.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/&/g, "&amp");
+    var name        = req.params.formData.itemName.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/&/g, "&amp");
+    var price = req.params.formData.itemPrice;
+    var link = req.params.formData.imageLink;
+    var quantity = req.params.formData.itemQuantity;
    
     var itemDetails = {
         itemName: name,
+        itemPrice: price,
+        itemQuantity: quantity,
+        imageLink: link
     };
     
     //isert the new item information into the collection
     db.collection('items').insertOne(itemDetails, (err,result)=>{
         if (err) return console.log(err);
         
-        //send the results(items) to angular
+        // notify successful add 
         res.json('success');
     });
 });
