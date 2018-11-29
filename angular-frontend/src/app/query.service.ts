@@ -18,25 +18,25 @@ export class QueryService {
   }
   
   getItems(){
-    return this.http.get('/api/home');
+    return this.http.get('http://se3316-ttoshev-lab5-ttoshev.c9users.io:8081/api/home');
   }
   
   //post request
-  addItem(formData){
-    let theItem = {
-      'itemName': formData.itemName;
-      'itemPrice': formData.itemPrice,
-      'itemQuantity': formData.itemQuantity,
-      'imageLink': formData.imageLink
-    }
-    console.log(theItem);
-    //TODO - modify this
-    return this.http.post('/api/add/'+formData.itemName+'/'+formData.itemPrice+'/'+formData.itemQuantity+'/'+formData.imageLink,theItem, this._options);
-  }
+  // addItem(formData){
+  //   let theItem = {
+  //     'itemName': formData.itemName,
+  //     'itemPrice': formData.itemPrice,
+  //     'itemQuantity': formData.itemQuantity,
+  //     'imageLink': formData.imageLink
+  //   }
+  //   console.log(theItem);
+  //   //TODO - modify this
+  //   return this.http.post('/api/add/'+formData.itemName+'/'+formData.itemPrice+'/'+formData.itemQuantity+'/'+formData.imageLink,theItem, this._options);
+  // }
   
   //post request
   addUser(email : string){
-    return;
+    //return;
     // let theUser = {
     //   'email':_product
     // }

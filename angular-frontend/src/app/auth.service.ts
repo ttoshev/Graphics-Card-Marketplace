@@ -87,6 +87,7 @@ export class AuthService {
      * log out of the current user, show them the 'profile' page, unauthenticated
      **/
     logout() {
+      this.tostr.success('Logging in...', 'Success!')
       this.afAuth.auth.signOut().then(() => {
         this.router.navigate(['/profile']);
       });

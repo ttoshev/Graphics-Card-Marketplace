@@ -17,9 +17,10 @@ export class ProfileComponent implements OnInit {
    * @params: router
    **/
   constructor(public authService: AuthService, private router: Router) {
-    
+  
     // if the user is successfully authenticated, set the username to be displayed
     console.log('Authenticated? '+this.authService.isAuthenticated())
+    console.log(this.authService.currentUser);
     if (this.authService.isAuthenticated()){
       this.username = this.authService.currentUser.email;
     }

@@ -9,18 +9,23 @@ import { QueryService } from '../query.service'
   styleUrls: ['./items.component.css']
 })
 export class ItemsComponent implements OnInit {
-  dataSource;
+  // the item details
+  items=[];
   
   /**
    * Inject queryService for getting items from DB
    * @params: queryService
    **/ 
   constructor(private queryService: QueryService) { 
-    this.queryService.getItems()
+    console.log('constructor of items...')
     
+    this.queryService.getItems()
     .subscribe((data)=>{
-      console.log(data); //test get request for query
-      this.dataSource=data; 
+      
+      for(var x in data){
+        this.items.push(data[x]);
+      }
+       
     })
   }
 

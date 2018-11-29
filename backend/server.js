@@ -13,6 +13,9 @@ var router = express.Router();
 app.use('/api', router);
 
 router.use(function(req, res, next) {
+    res.header('Access-Control-Allow-Origin', 'http://se3316-ttoshev-lab5-ttoshev.c9users.io:8080');
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
     next();
 });
 
@@ -23,7 +26,7 @@ MongoClient.connect('mongodb://ttoshev:banana24@ds117834.mlab.com:17834/cardshop
     if (err) return console.log(err);
     
     //MLab database
-    db = client.db('mystore'); 
+    db = client.db('cardshop'); 
     
     //listen when connected to Db
     app.listen (_port, function(){ //Listen, if DB connected
