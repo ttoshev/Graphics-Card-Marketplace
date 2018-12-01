@@ -2,12 +2,21 @@ ul {
   list-style-type: none;
 }
 
-.fifteen-size{
-    
+.half-size{
+    width: 25%;
 }
 
 .itemInList{
+    background-color: #c1dcf4;
     border: 1px solid #062F4F;
     padding: 5px;
-    width: 35%;
+    text-align:center; 
+    
+}
+
+.comment{
+    outline: 1px solid black;
+    background-color: #fffdad;
+    padding: 4px;
+
 }

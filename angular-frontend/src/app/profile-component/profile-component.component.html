@@ -10,7 +10,7 @@
     		<div class="col-md-12">
     			<ul class="nav nav-pills">
     				<li class="nav-item">
-    					 <button class="btn nav-link active">Home </button>
+    					 <button class="btn nav-link active" routerLink="/home">Home </button>
     				</li>
     				<li class="nav-item">
     					 <button class="btn nav-link disabled">Messages </button>
@@ -36,8 +36,12 @@
     	</div>
     	<div class="row">
     		<div class="col-md-4">
+    		  <app-items></app-items>
     		</div>
     		<div class="col-md-4">
+    		  <div>
+    		    <app-about></app-about>
+    		  </div>
     		</div>
     	</div>
     </div>
@@ -50,19 +54,19 @@
     			<ul class="nav nav-pills">
     			
     				<li class="nav-item">
-    					 <button class="btn nav-link active">Home </button>
+    					 <button class="btn nav-link active"  routerLink="/home">Home </button>
     				</li>
     				<li class="nav-item">
     					 <button class="btn nav-link active">Messages </button>
     				</li>
     				<li class="nav-item">
-    					<button class="btn nav-link right active">Cart</button>
+    					<button class="btn nav-link right active" (click)="showCart()">Cart</button>
     				</li>
     				
     				<li class="nav-item dropdown ml-md-auto">
     					<button class="btn nav-link dropdown-toggle right"  id="navbarDropdownMenuLink" data-toggle="dropdown">More </button>
     					<div class="dropdown-menu dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-    						<button class="btn dropdown-item" (click)='showAboutUs()'>About us </button>
+    						<button class="btn dropdown-item" (click)="hideCart()">About us </button>
     						<div class="dropdown-divider">
     						</div>  
     						  <button class="btn dropdown-item signout" (click)="signOut()" >
@@ -82,6 +86,12 @@
     		  <app-items></app-items>
     		</div>
     		<div class="col-md-4">
+    		  <div *ngIf="cartShown">
+    		    <app-cart></app-cart>
+    		  </div>
+    		  <div *ngIf="!cartShown">
+    		    <app-about></app-about>
+    		  </div>
     		</div>
     	</div>
     </div>

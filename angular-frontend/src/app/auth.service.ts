@@ -61,7 +61,6 @@ export class AuthService {
      * Function sends a verification email to the current user
      **/ 
     sendVerificationEmail(){
-      //if(this.currentUser)
       this.currentUser.sendEmailVerification()
       
       // Email sent.

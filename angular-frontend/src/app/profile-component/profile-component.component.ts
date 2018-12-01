@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 
 export class ProfileComponent implements OnInit {
   username;
+  cartShown = false;
   
   /**
    * Inject authService for user authentication and router to navigate angular pages
@@ -24,6 +25,9 @@ export class ProfileComponent implements OnInit {
     if (this.authService.isAuthenticated()){
       this.username = this.authService.currentUser.email;
     }
+    else{
+      this.router.navigate(['/home']);
+    }
     
   }
 
@@ -36,18 +40,24 @@ export class ProfileComponent implements OnInit {
     this.router.navigate(['/login']);
   }
   
-  /**
-   * TODO
-   */
-  showAboutUs(){
-    return;
-  }
-  
+
   /**
    * Log out from the current user
    **/
   signOut() {
     this.authService.logout();
+    this.router.navigate(['/home']);
+  }
+  
+  /**
+   * Switch between showing cart and about message
+   **/
+  showCart(){
+    this.cartShown=true;
+  }
+  
+  hideCart(){
+    this.cartShown=false;
   }
   
 }

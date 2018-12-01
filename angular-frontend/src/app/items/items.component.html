@@ -1,27 +1,68 @@
 <div>
     <ul *ngIf="items">
         <li *ngFor="let item of items" class="itemInList">
+            <div hidden #theIdWeNeed >{{item._id}}</div>
+            <div (click)="showDetails(theIdWeNeed.innerHTML)">
             <img src="{{item.imageLink}}" alt="{{item.itemName}}">
-            <h5>{{item.itemName}}</h5>
-            <p>$ {{item.itemPrice}}</p>
-            <p>{{item.itemQuantity}} In Stock</p>
-            <p>Popularity: {{item.popularityIndex}}/10</p>
-            <div class="form-group fifteen-size">
-                  <select class="form-control" id="qtyList">
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
-                    <option>6</option>
-                    <option>7</option>
-                    <option>8</option>
-                    <option>9</option>
-                  </select>
+                <h5>{{item.itemName}}</h5>
+                
+                <p>{{item.itemQuantity}} In Stock</p>
+
+                <div *ngIf="this.authService.currentUser">
+                    <div class="form-group">
+                        <select>
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                            <option>6</option>
+                            <option>7</option>
+                            <option>8</option>
+                            <option>9</option>
+                        </select>
+                    </div>
+                    <span>
+                        <button type="button" class="btn btn-primary half-size">Add</button>
+                    </span>
                 </div>
-            <span>
-                <button type="button" class="btn btn-primary fifteen-size">Add</button>
-            </span>
+            </div>
+            <div *ngIf="detailedItemID==theIdWeNeed.innerHTML">
+                <br>
+                
+                <p>$ {{item.itemPrice}}</p>
+                <br>
+                <span  *ngFor="let one of numberofstars" class="glyphicon glyphicon-star" style="text-align:center"></span>
+                
+                <div *ngFor="let rating of singleItemRatings; let i=index">
+                    <div *ngIf="i<6">
+                        <hr>
+                        <p>{{rating.userEmail}} says...</p>
+                        <p>Rating {{rating.rate}}/10</p>
+                        <div class="comment">
+                            <p>{{rating.comment}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <br>
+                    <hr>
+                    <h3>Post a comment:</h3>
+                    <form #formData='ngForm' (ngSubmit)='onSubmit(formData)'>
+                        <input #rating id="ratingy" type="number" placeholder="Rating out of 5..." min="0" max="5" step="1" (ngModel)="rate" name="rate"  (change)="changeSelection(rating.value)" required>
+                        <div>
+                            <span  *ngFor="let one of selectionStars; let i=index">
+                                <span *ngIf="i<5" class="glyphicon glyphicon-star" style="text-align:center"></span>
+                            </span>
+                        </div>
+                        
+                        <br>
+                        <br>
+                        <input type="text" placeholder="Write Something..." (ngModel)="comment" name="comment" class="input-txt" required>
+                        <button type="submit" [disabled]="!formData.valid" class="auth-btn"><span class="glyphicon glyphicon-check"></span> Submit</button>
+                    </form>
+                </div>
+            </div>
         </li>
     </ul>
 </div>

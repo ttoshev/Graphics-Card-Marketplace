@@ -35,13 +35,24 @@ MongoClient.connect('mongodb://ttoshev:banana24@ds117834.mlab.com:17834/cardshop
 });
 
 
-router.get('/home', (req, res) => { 
+router.get('/getItems', (req, res) => { 
     
-    //The DB cursor
+     //The DB cursor
      db.collection('items').find().toArray((err,results)=>{
         if (err) return console.log(err);
 
-        //send the results(items) to angular
+        //send the results(items)
+        res.json(results);
+    });
+});
+
+router.get('/getRatings', (req, res) => { 
+    
+     //The DB cursor
+     db.collection('ratings').find().toArray((err,results)=>{
+        if (err) return console.log(err);
+
+        //send the results(item ratings/comments)
         res.json(results);
     });
 });
