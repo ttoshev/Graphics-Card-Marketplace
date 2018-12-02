@@ -29,6 +29,9 @@ export class ProfileComponent implements OnInit {
       this.router.navigate(['/home']);
     }
     
+    // update the current manager list
+    this.authService.getMngrs();
+    
   }
 
   ngOnInit() {}

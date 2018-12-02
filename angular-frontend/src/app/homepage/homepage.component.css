@@ -1,3 +1,8 @@
 .bgnd{
     background-color: white;
 }
+
+.rightend{
+    text-align: right;
+    float:right;
+}

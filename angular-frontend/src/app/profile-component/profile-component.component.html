@@ -10,22 +10,23 @@
     		<div class="col-md-12">
     			<ul class="nav nav-pills">
     				<li class="nav-item">
-    					 <button class="btn nav-link active" routerLink="/home">Home </button>
+    					 <button class="btn nav-link active" routerLink="/home"><span class="glyphicon glyphicon-home"></span> Home </button>
     				</li>
     				<li class="nav-item">
-    					 <button class="btn nav-link disabled">Messages </button>
+    					 <button class="btn nav-link disabled "><span class="glyphicon glyphicon-envelope"></span> Messages </button>
     				</li>
     				<li class="nav-item">
-    					 <button class="btn nav-link right disabled">Cart </button>
+    					 <button class="btn nav-link right disabled"><span class="glyphicon glyphicon-shopping-cart"></span> Cart </button>
     				</li>
     					
     				<li class="nav-item dropdown ml-md-auto">
-    					<button class="btn nav-link dropdown-toggle right" id="navbarDropdownMenuLink" data-toggle="dropdown">More </button>
+    					<button class="btn nav-link dropdown-toggle right" id="navbarDropdownMenuLink" data-toggle="dropdown">More ... </button>
     					<div class="dropdown-menu dropdown-menu right" aria-labelledby="navbarDropdownMenuLink">
     						<button class="btn dropdown-item" (click)='showAboutUs()'>About us </button>
     						<div class="dropdown-divider">
     						</div>  <button class="btn dropdown-item signout" (click)='loginRedirect()' >Login </button>
     					</div>
+    					  
     				</li>
     					
     			</ul>
@@ -54,26 +55,44 @@
     			<ul class="nav nav-pills">
     			
     				<li class="nav-item">
-    					 <button class="btn nav-link active"  routerLink="/home">Home </button>
+    					 <button class="btn nav-link active"  routerLink="/home"><span class="glyphicon glyphicon-home"></span> Home </button>
     				</li>
     				<li class="nav-item">
-    					 <button class="btn nav-link active">Messages </button>
+    					 <button class="btn nav-link active"><span class="glyphicon glyphicon-envelope"></span> Messages </button>
     				</li>
     				<li class="nav-item">
-    					<button class="btn nav-link right active" (click)="showCart()">Cart</button>
+    					<button class="btn nav-link right active" (click)="showCart()"><span class="glyphicon glyphicon-shopping-cart"></span> Cart</button>
     				</li>
     				
-    				<li class="nav-item dropdown ml-md-auto">
-    					<button class="btn nav-link dropdown-toggle right"  id="navbarDropdownMenuLink" data-toggle="dropdown">More </button>
+            <li class="nav-item dropdown ml-md-auto">
+    					<button class="btn nav-link dropdown-toggle right"  id="navbarDropdownMenuLink" data-toggle="dropdown">More ... </button>
     					<div class="dropdown-menu dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
     						<button class="btn dropdown-item" (click)="hideCart()">About us </button>
     						<div class="dropdown-divider">
-    						</div>  
     						  <button class="btn dropdown-item signout" (click)="signOut()" >
     						    <span class="glyphicon glyphicon-log-out"></span> Sign out {{authService.currentUser.email}} 
     						  </button>
+    						</div>
     					</div>
-    				</li>
+            </li>
+            
+          	<div *ngIf="this.authService.isManager()" class='rightend'>
+  					  <p><span class="glyphicon glyphicon-user"></span></p>
+  					  <button class="btn nav-link dropdown-toggle right"  id="navbarDropdownMenuLink" data-toggle="dropdown">
+  					    Manager Options 
+  		        </button>
+    					<div class="dropdown-menu dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+    						<button class="btn dropdown-item">
+    						  Edit Users
+    						</button>
+    						<div class="dropdown-divider">
+    						  <button class="btn dropdown-item">
+    						     Edit Comments
+    						  </button>
+    						</div>
+    					</div>
+  					</div>
+    					
     			</ul>
     		
     			<h3 class="text-info">

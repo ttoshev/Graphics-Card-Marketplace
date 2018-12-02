@@ -9,10 +9,19 @@ import { HttpClient, HttpHeaders} from '@angular/common/http';
  * https://www.dunebook.com/how-to-set-up-authentication-in-angular-5-with-firebase-firestore/
  **/
  
+// export interface rating{
+//   userEmail: string,
+//   itemID: string,
+//   rate: string,
+//   comment: srting
+// }
+ 
 @Injectable({
   providedIn: 'root'
 })
 export class QueryService {
+  // url
+  myURL = 'http://se3316-ttoshev-lab5-ttoshev.c9users.io:8081/api/';
    //http header options
   _options = {
       headers: new HttpHeaders({
@@ -25,32 +34,29 @@ export class QueryService {
   }
   
   getItems(){
-    return this.http.get('http://se3316-ttoshev-lab5-ttoshev.c9users.io:8081/api/getItems');
+    return this.http.get(this.myURL+'getItems');
   }
   
-   getRatings(){
-    return this.http.get('http://se3316-ttoshev-lab5-ttoshev.c9users.io:8081/api/getRatings');
+  getRatings(){
+    return this.http.get(this.myURL+'Ratings');
   }
-  //post request
-  // addItem(formData){
-  //   let theItem = {
-  //     'itemName': formData.itemName,
-  //     'itemPrice': formData.itemPrice,
-  //     'itemQuantity': formData.itemQuantity,
-  //     'imageLink': formData.imageLink
-  //   }
-  //   console.log(theItem);
-  //   //TODO - modify this
-  //   return this.http.post('/api/add/'+formData.itemName+'/'+formData.itemPrice+'/'+formData.itemQuantity+'/'+formData.imageLink,theItem, this._options);
-  // }
+  
+  getManagers(){
+    return this.http.get(this.myURL+'Managers')
+  }
   
   //post request
-  addUser(email : string){
-    //return;
-    // let theUser = {
-    //   'email':_product
-    // }
-    // console.log(theItem);
-    // return this.http.post('/api/add/'+email, this._options);
+  postComment(formData,uEmail,itemId){
+    let thePost = {
+      'userEmail': uEmail,
+      'itemID': itemId,
+      'rate': formData.value.rate,
+      'comment': formData.value.comment
+    }
+    console.log(thePost);
+    return this.http.post(this.myURL+'Ratings',thePost, this._options)
+    .subscribe((data)=>{
+      console.log(data);
+    })
   }
 }

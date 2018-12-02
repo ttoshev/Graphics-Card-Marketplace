@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth.service';
+import { ToastrService } from 'ngx-toastr';
+
 
 @Component({
   selector: 'app-signup',
@@ -8,14 +10,22 @@ import { AuthService } from '../auth.service';
 })
 export class SignupComponent implements OnInit {
 
-  constructor(public authService: AuthService) { }
+  constructor(public authService: AuthService, private tostr: ToastrService) { }
 
   ngOnInit() {
   }
 
-//DOESNT RETURN PASSWORD
   onSubmit(formData) {
-    console.log(formData)
+    if (!formData.value.email){
+      this.tostr.warning("Please provide an email", 'Oops...');
+      return;
+    }
+    
+    else if(!formData.value.password){
+      this.tostr.warning("Please enter a password", 'Oops...');
+      return;
+    }
+    
     if (formData.valid) {
       console.log(formData.value);
       this.authService.emailSignup(

@@ -21,9 +21,9 @@ export class ItemsComponent implements OnInit {
   singleItemRatings=[];
   // the average rating for the clicked item
   averageRating=0;
-  // the stars that a clicked item has (which is average rating)
+  // the # of stars that a clicked item has (which is average rating rounded)
   numberofstars=[];
-  // the stars shown when adding a comment... change based on user input
+  // the stars shown when adding a comment... change asynchronously based on user input
   selectionStars=[];
 
   /**
@@ -35,8 +35,22 @@ export class ItemsComponent implements OnInit {
     this.getItems();
   }
   
+  /**
+   * This function stops a user from commenting on an item if they have already done so before.
+  **/ 
+  userCommented(){
+    for(var one of this.singleItemRatings){
+      if (one.userEmail==this.authService.currentUser.email){
+         return true;
+      }
+    }
+    return false;
+  }
+  
   // updates the arrays for items and item details
   getItems(){
+    this.items=[];
+    this.ratings=[];
     this.queryService.getItems()
     .subscribe((data)=>{
       
@@ -56,10 +70,12 @@ export class ItemsComponent implements OnInit {
     })
   }
   
+
   /**
    * Toggle item details when an item is clicked. If clicked again, removes item details from display
    **/
   showDetails(id){
+   
     
     // close item details (if click is on the opened item)
     if (this.detailedItemID==id){
@@ -82,22 +98,45 @@ export class ItemsComponent implements OnInit {
         }
     }
     
-    
+    // round to nearest number to display stars
     this.averageRating=Math.round(sum/this.singleItemRatings.length);
-    console.log(this.averageRating)
+    
+    // show stars if average rating can be calculated
     if(!isNaN(this.averageRating)){
       this.numberofstars=Array(this.averageRating).fill(1); // for use in *ngFor statement
     }
     
+
+    // select the clicked item to show the details for
     this.detailedItemID=id;
+      
   }
 
+  checkStock(itemStock){
+    var stock = parseFloat(itemStock);
+    if (stock<1){
+      return false
+    }
+    return true;
+  }
   /**
    * Called when user submits a rating and comment
    **/
-  onSubmit(entry){
-    console.log(entry.comment+'/'+entry.rating);
-   //console.log(entry);
+  onSubmit(entry,itemId){
+    
+    if (parseFloat(entry.value.rate)>5||parseFloat(entry.value.rate)<0){
+      alert('Invalid Rating! Must be between 0 and 5 stars');
+      
+      return;
+    }
+    
+    if (!confirm("Add this comment?")){
+      return;
+    }
+    
+    var userEmail = this.authService.currentUser.email;
+    this.queryService.postComment(entry,userEmail,itemId);
+    this.showDetails(this.detailedItemID);
   }
   
   /**
@@ -122,7 +161,7 @@ export class ItemsComponent implements OnInit {
     }
     
     // update DOM
-    (<HTMLInputElement>document.getElementById('ratingy')).value=numAltered.toString();
+    //(<HTMLInputElement>document.getElementById('ratingy')).value=numAltered.toString();
     
     // show the number of stars associeted with the current rating
     this.selectionStars=[]; // reset the number of stars

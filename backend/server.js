@@ -46,7 +46,18 @@ router.get('/getItems', (req, res) => {
     });
 });
 
-router.get('/getRatings', (req, res) => { 
+router.get('/Managers', (req, res) => { 
+    
+     //The DB cursor
+     db.collection('managers').find().toArray((err,results)=>{
+        if (err) return console.log(err);
+
+        //send the results(item ratings/comments)
+        res.json(results);
+    });
+});
+
+router.get('/Ratings', (req, res) => { 
     
      //The DB cursor
      db.collection('ratings').find().toArray((err,results)=>{
@@ -58,23 +69,26 @@ router.get('/getRatings', (req, res) => {
 });
 
 //Add an item
-router.post('/add/:formData', (req, res) => {
+router.post('/Ratings', (req, res) => {
+    
+    console.log('POST REQUEST');
+    console.log(req.body.userEmail);
     
     //remove malicious html input
-    var name        = req.params.formData.itemName.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/&/g, "&amp");
-    var price = req.params.formData.itemPrice;
-    var link = req.params.formData.imageLink;
-    var quantity = req.params.formData.itemQuantity;
+    // var name        = req.params.formData.itemName.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/&/g, "&amp");
+    // var price = req.params.formData.itemPrice;
+    // var link = req.params.formData.imageLink;
+    // var quantity = req.params.formData.itemQuantity;
    
-    var itemDetails = {
-        itemName: name,
-        itemPrice: price,
-        itemQuantity: quantity,
-        imageLink: link
+     var ratingDetails = {
+        userEmail: req.body.userEmail,
+        itemID: req.body.itemID,
+        rate: req.body.rate,
+        comment: req.body.comment
     };
     
     //isert the new item information into the collection
-    db.collection('items').insertOne(itemDetails, (err,result)=>{
+    db.collection('ratings').insertOne(ratingDetails, (err,result)=>{
         if (err) return console.log(err);
         
         // notify successful add 

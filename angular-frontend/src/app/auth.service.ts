@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { AngularFireAuth } from 'angularfire2/auth';
 import * as firebase from 'firebase/app';
 
+import { QueryService } from './query.service';
+
 import { ToastrService } from 'ngx-toastr';
 
 import { Observable } from 'rxjs';
@@ -12,19 +14,27 @@ import 'rxjs/add/operator/switchMap';
   providedIn: 'root'
 })
 export class AuthService {
+  // the current authentication state
   private authState: Observable<firebase.User>;
+  // the currently logged in user
   public currentUser: firebase.User = null;
+  // the list of all registered managerss
+  managerList=[];
+  // true if the current user is also a registered manager
+  manager = false;
   
   /**
    * Inject afAuth for Firebase user authentication, router for navigation of anuglar pages
    * @params: afAuth
    * @params: router
    * @params: toastr
+   * @params: queryService
    **/ 
   constructor(
     private afAuth: AngularFireAuth,
     private router: Router,
-    private tostr: ToastrService
+    private tostr: ToastrService,
+    private queryService: QueryService
     ){
       // get the authentication state
       this.authState = this.afAuth.authState;
@@ -43,9 +53,9 @@ export class AuthService {
         }
       },
         err => {
-          //this.openSnackBar(`${err.status} ${err.statusText} (${err.error.message})`, 'Please try again')
         });
       }
+      
   
     /**
      * Function Returns true if the current user has verified their email
@@ -56,6 +66,46 @@ export class AuthService {
       else
         return false;
     }
+    
+    
+    getMngrs(){
+      
+      this.managerList=[];
+      this.queryService.getManagers()
+      .subscribe((data)=>{
+      
+        // check if current user is a manager
+        for(var x in data){
+          this.managerList.push(data[x]);
+        }
+      })
+    }
+    
+    
+    /**
+     * Returns true if the current user is a store manager
+     **/
+    isManager(): boolean {
+      if (this.managerList.length<1)
+        return false;
+      // check authentication
+      if(!this.isAuthenticated()){
+        console.log('returning false');
+        return false;
+      }
+      
+      // check if current user is a manager
+      for(var x in this.managerList){
+        if (this.managerList[x].email==this.currentUser.email){ // is inded a store manager
+          console.log('returning true');
+          return true;
+        }
+      }
+      
+      console.log('finally, returning false');
+      return false;
+    }
+   
    
     /**
      * Function sends a verification email to the current user
@@ -75,12 +125,14 @@ export class AuthService {
       });
     }
     
+    
     /**
      * Used for signing in with google
      **/ 
     private oAuthLogin(provider) {
       return this.afAuth.auth.signInWithPopup(provider);
     }
+  
   
     /**
      * log out of the current user, show them the 'profile' page, unauthenticated
@@ -91,7 +143,8 @@ export class AuthService {
         this.router.navigate(['/profile']);
       });
     }
-  
+    
+    
   /**
    * "Back end" calls - Firebase's Authentication service allows for login operation without the need for a back end api
    * Source: https://www.dunebook.com/how-to-set-up-authentication-in-angular-5-with-firebase-firestore/
@@ -123,6 +176,7 @@ export class AuthService {
     
   }
   
+  
   googleLogin() {
     
     const provider = new firebase.auth.GoogleAuthProvider();
@@ -138,6 +192,7 @@ export class AuthService {
     });
     
   }
+  
   
   emailSignup(email: string, password: string) {
     
