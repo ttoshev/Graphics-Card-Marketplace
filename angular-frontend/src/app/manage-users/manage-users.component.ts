@@ -13,6 +13,7 @@ export class ManageUsersComponent implements OnInit {
   // the list of users
   users = [];
   managers = [];
+  thisUser;
   
   constructor(private queryService: QueryService, private authService: AuthService, private router: Router) {
     if(!this.authService.isManager()){
@@ -51,13 +52,50 @@ export class ManageUsersComponent implements OnInit {
               break;
             }
           }
-          
           if(a){
             this.users.push(data[x]);
           }
         }
-        
+
       });
+    });
+  }
+  
+  /**
+   * Disable a user in firebase db
+   **/
+  disableUser(email){
+    console.log("Disabling user");
+    console.log(email)
+    //this.getUser(email);
+    this.queryService.postStatus(email,true)
+    .subscribe((data)=>{
+        //this.getAll();
+    });
+    
+  }
+  
+  /**
+   * Enable a user in firebase db
+   **/
+  enableUser(email){
+    console.log("Enabling user");
+    //this.getUser(email);
+    this.queryService.postStatus(email,false)
+    .subscribe((data)=>{
+        //this.getAll();
+    });
+   
+  }
+  
+  /**
+   * Fetch a user from the firebase db
+   **/
+  getUser(email){
+    this.queryService.getSingleUser(email)
+    .subscribe((data)=>{
+      this.thisUser=data;
+      console.log(this.thisUser.email);
       
     });
     
@@ -69,10 +107,9 @@ export class ManageUsersComponent implements OnInit {
   makeManager(email){
     this.queryService.postManager(email)
     .subscribe((data)=>{
-        this.getAll();
+        //this.getAll();
     });
-
-    
+    return;
   }
 
 }

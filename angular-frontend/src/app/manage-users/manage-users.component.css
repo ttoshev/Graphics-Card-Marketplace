@@ -6,18 +6,17 @@
 .itemInList{
     outline: 1px solid #31708f;
     padding:5px;
-    padding-bottom: 65px;
+    padding-bottom: 60px;
     background-color: #c1dcf4;
 }
 
-.itemInList2{
-    outline: 1px solid #31708f;
-    padding:5px;
-    background-color: #c1dcf4;
+.itemInList:hover{
+    background-color: #69b1ef;
 }
 
 .userList{
     padding: 5px;
+    padding-bottom: 65px;
 }
 
 .managerList{

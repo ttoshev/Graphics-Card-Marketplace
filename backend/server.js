@@ -122,6 +122,20 @@ router.get('/Users', (req, res) => {
     });
 });
 
+//Get a single user from firebase
+router.get('/User/:userEmail', (req, res) => { 
+    
+     admin.auth().getUserByEmail(req.params.userEmail)
+      .then(function(userRecord) {
+        // See the UserRecord reference doc for the contents of userRecord.
+        //console.log("Successfully fetched user data:", userRecord.toJSON());
+        res.json(userRecord)
+      })
+      .catch(function(error) {
+        console.log("Error fetching user data:", error);
+      });
+});
+
 //Add an item
 router.post('/Users', (req, res) => {
 
@@ -138,27 +152,28 @@ router.post('/Users', (req, res) => {
     });
 });
 
-//Add an item
-router.post('/users/changeDisabled', (req, res) => {
+//Disable a user
+router.post('/changeDisabled', (req, res) => {
 
+    console.log("Disabling a user now--------------------------------------------------------------")
     var status = req.body.disabledStatus;
     var email = req.body.userEmail;
     
     admin.auth().getUserByEmail(email)
       .then(function(userRecord) {
-        var theUserID=userRecord.toJSON.uid;
+        var theUserID=userRecord.uid;
         // See the UserRecord reference doc for the contents of userRecord.
-        console.log("Successfully fetched user data:", userRecord.toJSON());
+        //console.log("Successfully fetched user data:", userRecord.toJSON());
         
         admin.auth().updateUser(theUserID, {
           disabled: status
         })
-          .then(function(userRecord) {
+          .then(function(userR) {
             // See the UserRecord reference doc for the contents of userRecord.
-            console.log("Successfully updated user", userRecord.toJSON());
+            console.log("Successfully updated user", userR.toJSON());
           })
-          .catch(function(error) {
-            console.log("Error updating user:", error);
+          .catch(function(err) {
+            console.log("Error updating user:", err);
           });
         
       })

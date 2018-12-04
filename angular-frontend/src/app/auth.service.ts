@@ -208,7 +208,7 @@ export class AuthService {
       this.login(email,password);
       
       //this.sendVerificationEmail();
-      this.queryService.postUser(email); // add the user to our mlab database
+      this.queryService.postUser(email.toLowerCase()); // add the user to our mlab database
 
       this.router.navigateByUrl('/login');
     })

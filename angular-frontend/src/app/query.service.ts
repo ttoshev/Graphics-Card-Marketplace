@@ -42,6 +42,11 @@ export class QueryService {
     return this.http.get(this.myURL+'Users')
   }
   
+  // from firebase
+  getSingleUser(email){
+    return this.http.get(this.myURL+'User/'+email);
+  }
+  
   //post request
   postComment(formData,uEmail,itemId){
     let thePost = {
@@ -84,6 +89,7 @@ export class QueryService {
       'disabledStatus': status
     }
     
-    return this.http.post(this.myURL+'Managers',theUser, this._options);
+    console.log(theUser);
+    return this.http.post(this.myURL+'changeDisabled',theUser, this._options);
   }
 }
