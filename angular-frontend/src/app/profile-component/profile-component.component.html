@@ -77,12 +77,12 @@
             </li>
             
           	<div *ngIf="this.authService.isManager()" class='rightend'>
-  					  <p><span class="glyphicon glyphicon-user"></span></p>
+  					  
   					  <button class="btn nav-link dropdown-toggle right"  id="navbarDropdownMenuLink" data-toggle="dropdown">
-  					    Manager Options 
+  					    <span class="glyphicon glyphicon-user"></span> Manager Options 
   		        </button>
     					<div class="dropdown-menu dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-    						<button class="btn dropdown-item">
+    						<button class="btn dropdown-item" routerLink="/manageUsers">
     						  Edit Users
     						</button>
     						<div class="dropdown-divider">

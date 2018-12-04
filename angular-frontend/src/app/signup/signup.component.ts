@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth.service';
 import { ToastrService } from 'ngx-toastr';
+import { QueryService } from '../query.service';
+
 
 
 @Component({
@@ -10,7 +12,7 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class SignupComponent implements OnInit {
 
-  constructor(public authService: AuthService, private tostr: ToastrService) { }
+  constructor(public authService: AuthService, private tostr: ToastrService, private queryService:QueryService) { }
 
   ngOnInit() {
   }
@@ -28,6 +30,7 @@ export class SignupComponent implements OnInit {
     
     if (formData.valid) {
       console.log(formData.value);
+      
       this.authService.emailSignup(
         formData.value.email,
         formData.value.password

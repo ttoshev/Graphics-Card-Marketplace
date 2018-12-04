@@ -17,7 +17,7 @@
     				<li class="nav-item dropdown ml-md-auto">
     					<button class="btn nav-link dropdown-toggle right" id="navbarDropdownMenuLink" data-toggle="dropdown">More ... </button>
     					<div class="dropdown-menu dropdown-menu right" aria-labelledby="navbarDropdownMenuLink">
-    						<button class="btn dropdown-item" (click)='showAboutUs()'>About us </button>
+    						<button class="btn dropdown-item" href="#about1234">About us </button>
     						<div class="dropdown-divider">
     						</div>  <button class="btn dropdown-item signout" (click)='loginRedirect()' >Login </button>
     					</div>
@@ -26,13 +26,13 @@
     		</div>
     	</div>
     </div>
-    	
+    
     <h1>HOME</h1>
     	
   	<div class="row">
   		<app-items></app-items>
   	</div>
-  	<div class="row" style="text-align: center">
+  	<div class="row" style="text-align: center" id="about1234">
   		<app-about></app-about>
   	</div>
   
@@ -70,7 +70,7 @@
       <div class="row">
     		<app-items></app-items>
     	</div>
-    	<div class="row" style="text-align: center">
+    	<div class="row" style="text-align: center" >
     		<app-about></app-about>
     	</div>
     </div>

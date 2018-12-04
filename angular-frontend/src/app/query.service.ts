@@ -9,13 +9,6 @@ import { HttpClient, HttpHeaders} from '@angular/common/http';
  * https://www.dunebook.com/how-to-set-up-authentication-in-angular-5-with-firebase-firestore/
  **/
  
-// export interface rating{
-//   userEmail: string,
-//   itemID: string,
-//   rate: string,
-//   comment: srting
-// }
- 
 @Injectable({
   providedIn: 'root'
 })
@@ -45,6 +38,10 @@ export class QueryService {
     return this.http.get(this.myURL+'Managers')
   }
   
+  getUsers(){
+    return this.http.get(this.myURL+'Users')
+  }
+  
   //post request
   postComment(formData,uEmail,itemId){
     let thePost = {
@@ -58,5 +55,35 @@ export class QueryService {
     .subscribe((data)=>{
       console.log(data);
     })
+  }
+  
+  postUser(email){
+    let theUser={
+      'userEmail': email
+    }
+    
+    return this.http.post(this.myURL+'Users',theUser, this._options)
+    .subscribe((data)=>{
+      console.log(data);
+    })
+    
+  }
+  
+  postManager(email){
+    let theUser={
+      'userEmail': email
+    }
+    
+    return this.http.post(this.myURL+'Managers',theUser, this._options);
+    
+  }
+  
+  postStatus(email, status){
+    let theUser={
+      'userEmail': email,
+      'disabledStatus': status
+    }
+    
+    return this.http.post(this.myURL+'Managers',theUser, this._options);
   }
 }

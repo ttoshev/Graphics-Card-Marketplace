@@ -25,6 +25,7 @@ export class HomepageComponent implements OnInit {
       this.username = this.authService.currentUser.email;
     }
     
+    this.authService.getMngrs();
   }
 
   ngOnInit() {}

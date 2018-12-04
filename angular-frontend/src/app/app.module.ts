@@ -23,6 +23,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { CartComponent } from './cart/cart.component';
 import { AboutComponent } from './about/about.component';
+import { ManageUsersComponent } from './manage-users/manage-users.component';
 
 const firebaseConfig = {
   apiKey: "AIzaSyBrb05-WjyJQxTDkZbFQzB1p2nVXMyIAI8",
@@ -43,7 +44,8 @@ const firebaseConfig = {
     ProfileComponent,
     ItemsComponent,
     CartComponent,
-    AboutComponent
+    AboutComponent,
+    ManageUsersComponent
   ],
   imports: [
     BrowserModule,

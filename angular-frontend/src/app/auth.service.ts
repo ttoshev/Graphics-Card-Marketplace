@@ -1,3 +1,5 @@
+//TUTORIAL USED FOR AUTHENTICATION: https://www.dunebook.com/how-to-set-up-authentication-in-angular-5-with-firebase-firestore/
+
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { AngularFireAuth } from 'angularfire2/auth';
@@ -96,7 +98,7 @@ export class AuthService {
       
       // check if current user is a manager
       for(var x in this.managerList){
-        if (this.managerList[x].email==this.currentUser.email){ // is inded a store manager
+        if (this.managerList[x].userEmail==this.currentUser.email){ // is inded a store manager
           console.log('returning true');
           return true;
         }
@@ -111,17 +113,18 @@ export class AuthService {
      * Function sends a verification email to the current user
      **/ 
     sendVerificationEmail(){
+      //alert("Sending a verification e-mail to: "+ this.currentUser.email);
       this.currentUser.sendEmailVerification()
       
       // Email sent.
       .then(function()  {
-        this.tostr.info('Verification Email Sent!', 'User Register');
+        //this.tostr.info('Verification Email Sent!', 'User Register');
       })
       
       // An error happened
       .catch(function(error) {
-        this.tostr.info('Verification Email Sent!', 'Alert');
-        console.log(error);
+        //this.tostr.info('We are sorry about that', 'Something went wrong');
+        //console.log(error);
       });
     }
     
@@ -138,9 +141,9 @@ export class AuthService {
      * log out of the current user, show them the 'profile' page, unauthenticated
      **/
     logout() {
-      this.tostr.success('Logging in...', 'Success!')
+      this.tostr.success('Logging out...', 'Success!')
       this.afAuth.auth.signOut().then(() => {
-        this.router.navigate(['/profile']);
+        this.router.navigate(['/home']);
       });
     }
     
@@ -154,27 +157,28 @@ export class AuthService {
     
     this.afAuth.auth.signInWithEmailAndPassword(email, password)
     .then(message => {
-      //console.log("auth.service.ts.login --> Has the user been varified? "+this.currentUser.emailVerified);
+      console.log("auth.service.ts.login --> Has the user been verified? "+this.currentUser.emailVerified);
+      
+      // verified user login
+      if (this.isAuthenticated()){
+        this.tostr.success('Logging in...', 'Success!')
+        this.router.navigateByUrl('/profile');
+      }
+      
+      // unverified user attempted login
+      else{
+        if(this.currentUser){
+          this.sendVerificationEmail();
+          this.tostr.warning('Email not verified! Sending verification', 'Oops...');
+        }
+      }
     })
     .catch(err => {
-      this.tostr.warning(err.message, 'Oops...');
+        this.tostr.warning(err.message, 'Oops...');
       console.log('Something went wrong: ', err.message);
     });
     
-    // verified user login
-    if (this.isAuthenticated()){
-      this.tostr.success('Logging in...', 'Success!')
-      this.router.navigateByUrl('/profile');
-    }
-    // unverified user attempted login
-    else{
-      if(this.currentUser){
-        this.sendVerificationEmail();
-        this.tostr.warning('Email not verified! Resending', 'Oops...');
-      }
-    }
-    
-  }
+}
   
   
   googleLogin() {
@@ -199,7 +203,13 @@ export class AuthService {
     this.afAuth.auth.createUserWithEmailAndPassword(email, password)
     .then(message => {
       console.log('Success', message);
-      this.sendVerificationEmail();
+      
+      this.login(email,password);
+      this.login(email,password);
+      
+      //this.sendVerificationEmail();
+      this.queryService.postUser(email); // add the user to our mlab database
+
       this.router.navigateByUrl('/login');
     })
     

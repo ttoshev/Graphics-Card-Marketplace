@@ -38,7 +38,7 @@
                 <span  *ngFor="let one of numberofstars" class="glyphicon glyphicon-star" style="text-align:center"></span>
                 
                 <div *ngFor="let rating of singleItemRatings; let i=index">
-                    <div *ngIf="i<6">
+                    <div *ngIf="i<6"> <!--Display up to 5 items-->
                         <hr>
                         <p>{{rating.userEmail}} says...</p>
                         <p>Rating {{rating.rate}}/10</p>
@@ -50,7 +50,7 @@
                 <div>
                     <br>
                     <hr>
-                    <div *ngIf="!userCommented()">
+                    <div *ngIf="!userCommented()&&this.authService.isAuthenticated()">
                         <h3>Post a comment:</h3>
                         <form #formData='ngForm' (ngSubmit)='onSubmit(formData,theIdWeNeed.innerHTML)'>
                             <input #rating id="ratingy" type="number" placeholder="Rating out of 5..." min="0" max="5" step="1" (ngModel)="rate" name="rate"  (change)="changeSelection(rating.value)" required>

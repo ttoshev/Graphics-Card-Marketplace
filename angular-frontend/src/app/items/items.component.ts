@@ -40,8 +40,10 @@ export class ItemsComponent implements OnInit {
   **/ 
   userCommented(){
     for(var one of this.singleItemRatings){
-      if (one.userEmail==this.authService.currentUser.email){
-         return true;
+      if(this.authService.isAuthenticated()){
+        if (one.userEmail==this.authService.currentUser.email){
+           return true;
+        }
       }
     }
     return false;
@@ -136,11 +138,12 @@ export class ItemsComponent implements OnInit {
     
     var userEmail = this.authService.currentUser.email;
     this.queryService.postComment(entry,userEmail,itemId);
+    //this.getItems();
     this.showDetails(this.detailedItemID);
   }
   
   /**
-   * This function configures the stars displayed when a user is entering an item
+   * This function configures the stars and comments displayed when a user is entering an item
    **/ 
   changeSelection(num){
     var numAltered = Math.round(parseFloat(num));

@@ -37,6 +37,8 @@ export class EmailComponent implements OnInit {
     // check if the form has been filled out correctly
     if (formData.valid) {
       this.authService.login(formData.value.email,formData.value.password);
+      this.authService.login(formData.value.email,formData.value.password);
+
     }
     
   }

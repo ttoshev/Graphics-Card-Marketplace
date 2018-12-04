@@ -1,0 +1,31 @@
+.bgnd{
+    padding: 5px;
+    background-color: white;
+}
+
+.itemInList{
+    outline: 1px solid #31708f;
+    padding:5px;
+    padding-bottom: 65px;
+    background-color: #c1dcf4;
+}
+
+.itemInList2{
+    outline: 1px solid #31708f;
+    padding:5px;
+    background-color: #c1dcf4;
+}
+
+.userList{
+    padding: 5px;
+}
+
+.managerList{
+    padding: 5px;
+}
+
+.rightend{
+    text-align: right;
+    float:right;
+    width: 15%;
+}
