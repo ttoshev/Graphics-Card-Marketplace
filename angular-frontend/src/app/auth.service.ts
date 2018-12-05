@@ -92,19 +92,15 @@ export class AuthService {
         return false;
       // check authentication
       if(!this.isAuthenticated()){
-        console.log('returning false');
         return false;
       }
       
       // check if current user is a manager
       for(var x in this.managerList){
         if (this.managerList[x].userEmail==this.currentUser.email){ // is inded a store manager
-          console.log('returning true');
           return true;
         }
       }
-      
-      console.log('finally, returning false');
       return false;
     }
    

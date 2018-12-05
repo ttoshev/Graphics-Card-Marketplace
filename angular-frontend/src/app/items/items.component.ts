@@ -3,6 +3,7 @@ import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
 import { QueryService } from '../query.service';
 import { Directive, Output, EventEmitter, Input, SimpleChange} from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
 
 
 @Component({
@@ -30,7 +31,11 @@ export class ItemsComponent implements OnInit {
    * Inject queryService for getting items from DB
    * @params: queryService
    **/ 
-  constructor(private queryService: QueryService, private authService: AuthService) { 
+  constructor(
+    private queryService: QueryService, 
+    private authService: AuthService,
+    private tostr: ToastrService
+  ) { 
     // initial get for all items & item details
     this.getItems();
   }
@@ -47,6 +52,46 @@ export class ItemsComponent implements OnInit {
       }
     }
     return false;
+  }
+  
+  modifyItem(id, name, quantity, price){
+    let item = {
+      'id':id,
+      'name': name,
+      'quantity': quantity,
+      'price': price
+    }
+    this.queryService.postItemUpdate(item)
+    .subscribe((data)=>{
+      console.log(data);
+      
+    });
+    this.tostr.success('Item updated!', 'Success!');
+  }
+  
+  removeItem(id){
+    this.queryService.postRemoveItem(id)
+    .subscribe((data)=>{
+      console.log(data);
+      
+    });
+    this.tostr.warning('Item removed!', 'Success!');
+
+  }
+  
+  addItem(name,price,quantity,imageLink){
+    let newItem={
+      'name': name,
+      'price': price,
+      'quantity': quantity,
+      'link': imageLink
+    }
+    console.log(newItem);
+    
+    this.queryService.postAddItem(newItem).subscribe((data)=>{
+      console.log(data);
+    });
+    this.tostr.success('Item added!', 'Success!');
   }
   
   // updates the arrays for items and item details
@@ -135,9 +180,9 @@ export class ItemsComponent implements OnInit {
     if (!confirm("Add this comment?")){
       return;
     }
-    
+    var hidden=false;
     var userEmail = this.authService.currentUser.email;
-    this.queryService.postComment(entry,userEmail,itemId);
+    this.queryService.postComment(entry,userEmail,itemId,hidden);
     //this.getItems();
     this.showDetails(this.detailedItemID);
   }
@@ -172,6 +217,22 @@ export class ItemsComponent implements OnInit {
       this.selectionStars=Array(numAltered).fill(1);
     }
     return;
+  }
+  
+  showComment(id){
+    this.queryService.postCommentStatus(id, false)
+    .subscribe((data)=>{
+    
+    });
+    this.tostr.success('Comment shown!', 'Success!');
+  }
+  
+  hideComment(id){
+    this.queryService.postCommentStatus(id, true)
+    .subscribe((data)=>{
+      
+    });
+    this.tostr.warning('Comment hidden!', 'Success!');
   }
   
   ngOnInit() {

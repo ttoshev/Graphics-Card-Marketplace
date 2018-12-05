@@ -7,6 +7,8 @@ var _port           = 8081;
 var admin = require('firebase-admin');
 var serviceAccount = require('../static/my-store-9c70c-firebase-adminsdk-a5dt0-3a073655fb.json');
 var db;
+var ObjectId = require('mongodb').ObjectID;
+
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json())
@@ -98,7 +100,8 @@ router.post('/Ratings', (req, res) => {
         userEmail: req.body.userEmail,
         itemID: req.body.itemID,
         rate: req.body.rate,
-        comment: req.body.comment
+        comment: req.body.comment,
+        hidden: req.body.hidden
     };
     
     //isert the new item information into the collection
@@ -127,8 +130,7 @@ router.get('/User/:userEmail', (req, res) => {
     
      admin.auth().getUserByEmail(req.params.userEmail)
       .then(function(userRecord) {
-        // See the UserRecord reference doc for the contents of userRecord.
-        //console.log("Successfully fetched user data:", userRecord.toJSON());
+
         res.json(userRecord)
       })
       .catch(function(error) {
@@ -155,16 +157,13 @@ router.post('/Users', (req, res) => {
 //Disable a user
 router.post('/changeDisabled', (req, res) => {
 
-    console.log("Disabling a user now--------------------------------------------------------------")
     var status = req.body.disabledStatus;
     var email = req.body.userEmail;
     
     admin.auth().getUserByEmail(email)
       .then(function(userRecord) {
         var theUserID=userRecord.uid;
-        // See the UserRecord reference doc for the contents of userRecord.
-        //console.log("Successfully fetched user data:", userRecord.toJSON());
-        
+
         admin.auth().updateUser(theUserID, {
           disabled: status
         })
@@ -181,5 +180,71 @@ router.post('/changeDisabled', (req, res) => {
       .catch(function(error) {
         console.log("Error fetching user data:", error);
       });
+});
+
+//Hide a comment from users
+router.post('/changeHidden', (req, res) => {
+
+   var id = req.body._id;
+   var status = req.body.hidden;
+   
+  db.collection('ratings').updateOne(
+    { '_id': ObjectId(id)}, 
+    { $set: {'hidden': status} }
+  ), 
+    
+    (err,result)=>{
+        if (err) return console.log(err);
+        
+        // notify successful add 
+        console.log('changed!')
+        res.json('success');
+    };
+});
+
+//modify item details
+router.post('/modifyItem', (req, res) => {
+   db.collection('items').updateOne(
+    { '_id': ObjectId(req.body.id)}, 
+    { $set: {'itemName': req.body.name, 'itemPrice':req.body.price, 'itemQuantity':req.body.quantity} }
+  ), 
+    
+    (err,result)=>{
+        if (err) return console.log(err);
+        
+        // notify successful add 
+        console.log('changed!')
+        res.json('success');
+    };
+});
+
+router.post('/removeItem', (req, res) => {
+   
+    console.log("removing..."+req.body.id);
+    console.log(req.body.id);
+    db.collection('items').deleteOne({ '_id': ObjectId(req.body.id)})//, 
+    
+    // (err,result)=>{
+    //     if (err) return console.log(err);
+        
+    //     // notify successful add 
+    //     console.log('changed!')
+    //     res.json('success');
+    // };
+});
+
+router.post('/addItem', (req, res) => {
+    
+    let myItem={
+        'itemName': req.body.name,
+        'itemPrice': req.body.price,
+        'itemQuantity': req.body.quantity,
+        'imageLink': req.body.link
+    }
+    console.log(myItem);
+    //isert the new item information into the collection
+    db.collection('items').insertOne(myItem, (err,result) =>{
+        if (err) return console.log(err);
+    });
 });
 

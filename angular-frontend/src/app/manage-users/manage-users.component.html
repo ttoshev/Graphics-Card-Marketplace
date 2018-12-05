@@ -22,18 +22,18 @@
                             
                             <div *ngIf="thisUser">
                                 
-                                    <button class="btn nav-link" *ngIf="!thisUser.disabled &&thisUser.email==user.userEmail" (click)="makeManager(user.userEmail)" >
-                                     Make Manager
-                                    </button>
-                                    <br>
-                                    
-                                    <button *ngIf="thisUser.disabled &&thisUser.email==user.userEmail" class="btn btn-success" (click)="enableUser(user.userEmail)">
-                                     Enable
-                                    </button>
-                                    
-                                    <button *ngIf="!thisUser.disabled &&thisUser.email==user.userEmail" class="btn btn-danger" (click)="disableUser(user.userEmail)">
-                                     Disable
-                                    </button>
+                                <button class="btn nav-link" *ngIf="!thisUser.disabled &&thisUser.email==user.userEmail" (click)="makeManager(user.userEmail)">
+                                 Make Manager
+                                </button>
+                                <br>
+                                
+                                <button *ngIf="thisUser.disabled &&thisUser.email==user.userEmail" class="btn btn-success" (click)="enableUser(user.userEmail)">
+                                 Enable
+                                </button>
+                                
+                                <button *ngIf="!thisUser.disabled &&thisUser.email==user.userEmail" class="btn btn-danger" (click)="disableUser(user.userEmail)">
+                                 Disable
+                                </button>
                                     
                             </div>
                             

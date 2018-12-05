@@ -48,12 +48,13 @@ export class QueryService {
   }
   
   //post request
-  postComment(formData,uEmail,itemId){
+  postComment(formData,uEmail,itemId,hidden){
     let thePost = {
       'userEmail': uEmail,
       'itemID': itemId,
       'rate': formData.value.rate,
-      'comment': formData.value.comment
+      'comment': formData.value.comment,
+      'hidden':hidden
     }
     console.log(thePost);
     return this.http.post(this.myURL+'Ratings',thePost, this._options)
@@ -91,5 +92,31 @@ export class QueryService {
     
     console.log(theUser);
     return this.http.post(this.myURL+'changeDisabled',theUser, this._options);
+  }
+  
+  postCommentStatus(commentID, stat){
+    let theComment={
+      '_id': commentID,
+      'hidden': stat
+    }
+    
+    return this.http.post(this.myURL+'changeHidden',theComment, this._options);
+  }
+  
+  postItemUpdate(anItem){
+    return this.http.post(this.myURL+'modifyItem',anItem,this._options);
+  }
+  
+  postRemoveItem(id){
+    let myObject={
+      'id':id,
+      'why':'im not sure'
+    }
+    console.log(myObject);
+    return this.http.post(this.myURL+'removeItem',myObject,this._options);
+  }
+  
+  postAddItem(anItem){
+    return this.http.post(this.myURL+'addItem',anItem,this._options);
   }
 }

@@ -1,52 +1,134 @@
 <div>
     <ul *ngIf="items" >
         <li *ngFor="let item of items" class="itemInList">
+            
             <div hidden #theIdWeNeed >{{item._id}}</div>
             <div hidden #theStockWeNeed >{{item.itemQuantity}}</div>
-            <div *ngIf="checkStock(theStockWeNeed.innertHtml)">
-                <div (click)="showDetails(theIdWeNeed.innerHTML)">
-                <img src="{{item.imageLink}}" alt="{{item.itemName}}">
-                    <h5>{{item.itemName}}</h5>
-                    
-                    <p>{{item.itemQuantity}} In Stock</p>
-    
-                    <div *ngIf="this.authService.currentUser">
-                        <div class="form-group">
-                            <select>
-                                <option>1</option>
-                                <option>2</option>
-                                <option>3</option>
-                                <option>4</option>
-                                <option>5</option>
-                                <option>6</option>
-                                <option>7</option>
-                                <option>8</option>
-                                <option>9</option>
-                            </select>
+            
+            <div *ngIf="!this.authService.isManager()">
+                <div *ngIf="checkStock(theStockWeNeed.innertHtml)">
+                    <div (click)="showDetails(theIdWeNeed.innerHTML)">
+                    <img src="{{item.imageLink}}" alt="{{item.itemName}}">
+                        <h5>{{item.itemName}}</h5>
+                        
+                        <p>{{item.itemQuantity}} In Stock</p>
+        
+                        <div *ngIf="this.authService.currentUser">
+                            <div class="form-group">
+                                <select>
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                    <option>5</option>
+                                    <option>6</option>
+                                    <option>7</option>
+                                    <option>8</option>
+                                    <option>9</option>
+                                </select>
+                            </div>
+                            <span>
+                                <button type="button" (click)="userCommented()" class="btn btn-primary half-size">Add</button>
+                            </span>
                         </div>
-                        <span>
-                            <button type="button" (click)="userCommented()" class="btn btn-primary half-size">Add</button>
-                        </span>
                     </div>
                 </div>
             </div>
+            
+            <div *ngIf="this.authService.isManager()">
+                <div *ngIf="checkStock(theStockWeNeed.innertHtml)">
+                    <div (click)="showDetails(theIdWeNeed.innerHTML)">
+                        <img src="{{item.imageLink}}" alt="{{item.itemName}}">
+                        <br>
+                        <input #name type="text" value="{{item.itemName}}">
+                        <br>
+                        <br>
+                        <p>Quantity in Stock:</p>
+                        <input #quantity type="number" value="{{item.itemQuantity}}"> 
+                        <br>
+                        <br>
+                        <p>Price ($CDN):</p>
+                        <input #price type="number" value="{{item.itemPrice}}"> 
+                        <br>
+                        <br>
+                        <span>
+                            <button type="button" class="btn half-size" (click)="modifyItem(item._id,name.value,quantity.value,price.value)">Save Changes</button>
+                            <br>
+                            
+                            <button type="button" class="btn btn-danger half-size" (click)="removeItem(item._id)">Delete</button>
+                            <br>
+                            
+                        </span>
+                        <br>
+                        <div *ngIf="this.authService.currentUser">
+                            <div class="form-group">
+                                <select>
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                    <option>5</option>
+                                    <option>6</option>
+                                    <option>7</option>
+                                    <option>8</option>
+                                    <option>9</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-primary half-size">Add</button>  
+                    </div>
+                </div>
+            </div>
+            
             <div *ngIf="detailedItemID==theIdWeNeed.innerHTML">
                 <br>
                 
-                <p>$ {{item.itemPrice}}</p>
+                <div *ngIf="!this.authService.isManager()">
+                    <p>$ {{item.itemPrice}}</p> 
+                    <br>
+                </div>
+
                 <br>
                 <span  *ngFor="let one of numberofstars" class="glyphicon glyphicon-star" style="text-align:center"></span>
                 
-                <div *ngFor="let rating of singleItemRatings; let i=index">
-                    <div *ngIf="i<6"> <!--Display up to 5 items-->
-                        <hr>
-                        <p>{{rating.userEmail}} says...</p>
-                        <p>Rating {{rating.rate}}/10</p>
-                        <div class="comment">
-                            <p>{{rating.comment}}</p>
+                <div *ngIf="!this.authService.isManager()">
+                    <div *ngFor="let rating of singleItemRatings; let i=index">
+                            
+                        <div *ngIf="!rating.hidden">
+                            <hr>
+                            <h4>{{rating.userEmail}} says...</h4>
+                            <p>Rating {{rating.rate}}/5</p>
+                            <div class="comment">
+                                <p>{{rating.comment}}</p>
+                            </div>
                         </div>
                     </div>
                 </div>
+                
+                <div *ngIf="this.authService.isManager()">
+                    <div *ngFor="let rating of singleItemRatings; let i=index">
+                            
+                        <hr>
+                        <p>Hidden comment? {{rating.hidden}}
+                            <span>
+                                <div *ngIf="rating.hidden">
+                                    <button class="btn btn-success half-size" (click)="showComment(rating._id)">Show to Users</button>
+                                </div>
+                                
+                                <div *ngIf="!rating.hidden">
+                                    <button class="btn btn-warning half-size" (click)="hideComment(rating._id)">Hide from Users</button>
+                                </div>
+                            </span>
+                        </p>
+                        <h4>{{rating.userEmail}} says...</h4>
+                        <p>Rating {{rating.rate}}/5</p>
+                        <div class="comment">
+                            <p>{{rating.comment}}</p>
+                        </div>
+                        
+                    </div>
+                </div>
+                
                 <div>
                     <br>
                     <hr>
@@ -70,4 +152,27 @@
             </div>
         </li>
     </ul>
+    
+    <div *ngIf="this.authService.isManager()" style="text-align:center">
+        <p>Item Name:</p>
+        <input #NewName type="text" value="Enter a name..">
+        <br>
+        <br>
+        <p>Quantity in Stock:</p>
+        <input #NewQuantity type="number"> 
+        <br>
+        <br>
+        <p>Price ($CDN):</p>
+        <input #NewPrice type="number"> 
+        <br>
+        <br>
+        <p>Link to image:</p>
+        <input #NewImage type="text" value="Enter a link..."> 
+        <br>
+        <br>
+        <span>
+            <button type="button" class="btn half-size" (click)="addItem(NewName.value,NewQuantity.value, NewPrice.value,NewImage.value)">Add to Items</button>
+            <br>
+        </span>
+    <div>
 </div>
