@@ -26,29 +26,47 @@ export class QueryService {
     
   }
   
+  /**
+   * Get all items (from mlab)
+   **/ 
   getItems(){
     return this.http.get(this.myURL+'getItems');
   }
   
+  /**
+   * Get all ratings (from mlab)
+   **/ 
   getRatings(){
     return this.http.get(this.myURL+'Ratings');
   }
   
+  /**
+   * Get all managers (from mlab)
+   **/ 
   getManagers(){
     return this.http.get(this.myURL+'Managers')
   }
   
+  /**
+   * Get all users (from mlab)
+   **/ 
   getUsers(){
     return this.http.get(this.myURL+'Users')
   }
   
-  // from firebase
+  /**
+   * Get single user (from firebase)
+   **/ 
   getSingleUser(email){
     return this.http.get(this.myURL+'User/'+email);
   }
   
-  //post request
+  /**
+   * Post a new comment to an item
+   **/ 
   postComment(formData,uEmail,itemId,hidden){
+    
+    // create the post
     let thePost = {
       'userEmail': uEmail,
       'itemID': itemId,
@@ -56,13 +74,17 @@ export class QueryService {
       'comment': formData.value.comment,
       'hidden':hidden
     }
-    console.log(thePost);
+    
+    // send the request
     return this.http.post(this.myURL+'Ratings',thePost, this._options)
     .subscribe((data)=>{
-      console.log(data);
+
     })
   }
   
+  /**
+   * Add a new user to users collection in mlab
+   **/ 
   postUser(email){
     let theUser={
       'userEmail': email
@@ -70,11 +92,14 @@ export class QueryService {
     
     return this.http.post(this.myURL+'Users',theUser, this._options)
     .subscribe((data)=>{
-      console.log(data);
+
     })
     
   }
   
+  /**
+   * Add a new manager to managers collection in mlab
+   **/ 
   postManager(email){
     let theUser={
       'userEmail': email
@@ -84,38 +109,60 @@ export class QueryService {
     
   }
   
+  /**
+   * Change the status of a user in firebase (disabled/enabled)
+   **/ 
   postStatus(email, status){
+    // create the user
     let theUser={
       'userEmail': email,
       'disabledStatus': status
     }
     
-    console.log(theUser);
+    // send the request
     return this.http.post(this.myURL+'changeDisabled',theUser, this._options);
   }
   
+  /**
+   * Hide/show a given comment
+   **/ 
   postCommentStatus(commentID, stat){
+    
+    // set up the comment to modify and its status
     let theComment={
       '_id': commentID,
       'hidden': stat
     }
     
+    // send the request
     return this.http.post(this.myURL+'changeHidden',theComment, this._options);
   }
   
+  /**
+   * Modify an item in mlab collection
+   **/
   postItemUpdate(anItem){
     return this.http.post(this.myURL+'modifyItem',anItem,this._options);
   }
   
+  /**
+   * Remove an item from mlab collection
+   **/ 
   postRemoveItem(id){
+    
+    // set up the item to remove
     let myObject={
       'id':id,
       'why':'im not sure'
     }
-    console.log(myObject);
+    
+    // send the request
     return this.http.post(this.myURL+'removeItem',myObject,this._options);
   }
   
+  /**
+   * Add a new item to the mlab collection
+   **/ 
   postAddItem(anItem){
     return this.http.post(this.myURL+'addItem',anItem,this._options);
   }

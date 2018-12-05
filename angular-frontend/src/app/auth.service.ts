@@ -60,7 +60,7 @@ export class AuthService {
       
   
     /**
-     * Function Returns true if the current user has verified their email
+     * Function returns true if the current user has verified their email
      **/ 
     isAuthenticated(): boolean {
       if(this.currentUser)
@@ -69,14 +69,16 @@ export class AuthService {
         return false;
     }
     
-    
+    /**
+     * Update the managerList array to hold the most recent list of managers
+     **/ 
     getMngrs(){
-      
       this.managerList=[];
+      
+      // getManagers function from our query service
       this.queryService.getManagers()
       .subscribe((data)=>{
-      
-        // check if current user is a manager
+        // push the newly returned list to our manager's list
         for(var x in data){
           this.managerList.push(data[x]);
         }
@@ -88,8 +90,10 @@ export class AuthService {
      * Returns true if the current user is a store manager
      **/
     isManager(): boolean {
+      
       if (this.managerList.length<1)
         return false;
+      
       // check authentication
       if(!this.isAuthenticated()){
         return false;
@@ -97,11 +101,11 @@ export class AuthService {
       
       // check if current user is a manager
       for(var x in this.managerList){
-        if (this.managerList[x].userEmail==this.currentUser.email){ // is inded a store manager
+        if (this.managerList[x].userEmail==this.currentUser.email){ // is indeed a store manager
           return true;
         }
       }
-      return false;
+      return false; // not found in list of managers
     }
    
    
@@ -109,24 +113,20 @@ export class AuthService {
      * Function sends a verification email to the current user
      **/ 
     sendVerificationEmail(){
-      //alert("Sending a verification e-mail to: "+ this.currentUser.email);
       this.currentUser.sendEmailVerification()
       
-      // Email sent.
       .then(function()  {
-        //this.tostr.info('Verification Email Sent!', 'User Register');
+
       })
       
-      // An error happened
       .catch(function(error) {
-        //this.tostr.info('We are sorry about that', 'Something went wrong');
-        //console.log(error);
+
       });
     }
     
     
     /**
-     * Used for signing in with google
+     * Used for signing in with Google
      **/ 
     private oAuthLogin(provider) {
       return this.afAuth.auth.signInWithPopup(provider);
@@ -134,7 +134,7 @@ export class AuthService {
   
   
     /**
-     * log out of the current user, show them the 'profile' page, unauthenticated
+     * Log out of the current user, show them the homepage, unauthenticated
      **/
     logout() {
       this.tostr.success('Logging out...', 'Success!')

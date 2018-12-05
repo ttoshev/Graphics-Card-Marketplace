@@ -43,7 +43,7 @@ MongoClient.connect('mongodb://ttoshev:banana24@ds117834.mlab.com:17834/cardshop
     });
 });
 
-
+//get all the items
 router.get('/getItems', (req, res) => { 
     
      //The DB cursor
@@ -55,6 +55,7 @@ router.get('/getItems', (req, res) => {
     });
 });
 
+// get all the managers
 router.get('/Managers', (req, res) => { 
     
      //The DB cursor
@@ -66,7 +67,7 @@ router.get('/Managers', (req, res) => {
     });
 });
 
-//Add an item
+// Add an item
 router.post('/Managers', (req, res) => {
 
      var details = {
@@ -82,6 +83,7 @@ router.post('/Managers', (req, res) => {
     });
 });
 
+// get all ratings
 router.get('/Ratings', (req, res) => { 
     
      //The DB cursor
@@ -93,7 +95,7 @@ router.get('/Ratings', (req, res) => {
     });
 });
 
-//Add an item
+// Add an item
 router.post('/Ratings', (req, res) => {
 
      var ratingDetails = {
@@ -113,6 +115,7 @@ router.post('/Ratings', (req, res) => {
     });
 });
 
+// get all users
 router.get('/Users', (req, res) => { 
     
      //The DB cursor
@@ -157,6 +160,7 @@ router.post('/Users', (req, res) => {
 //Disable a user
 router.post('/changeDisabled', (req, res) => {
 
+    // no need to worry about input sanitaion here
     var status = req.body.disabledStatus;
     var email = req.body.userEmail;
     
@@ -185,64 +189,51 @@ router.post('/changeDisabled', (req, res) => {
 //Hide a comment from users
 router.post('/changeHidden', (req, res) => {
 
-   var id = req.body._id;
-   var status = req.body.hidden;
+    // no need to worry about input sanitation here
+    var id = req.body._id;
+    var status = req.body.hidden;
    
   db.collection('ratings').updateOne(
     { '_id': ObjectId(id)}, 
     { $set: {'hidden': status} }
-  ), 
-    
-    (err,result)=>{
-        if (err) return console.log(err);
-        
-        // notify successful add 
-        console.log('changed!')
-        res.json('success');
-    };
+  );
 });
 
-//modify item details
+//modify an existing item's details
 router.post('/modifyItem', (req, res) => {
-   db.collection('items').updateOne(
-    { '_id': ObjectId(req.body.id)}, 
-    { $set: {'itemName': req.body.name, 'itemPrice':req.body.price, 'itemQuantity':req.body.quantity} }
-  ), 
     
-    (err,result)=>{
-        if (err) return console.log(err);
-        
-        // notify successful add 
-        console.log('changed!')
-        res.json('success');
+    // create the item and sanitation 
+    let theItem={
+        'name': req.body.name.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/&/g, "&amp"),
+        'price': req.body.price.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/&/g, "&amp"),
+        'quantity': req.body.quantity.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/&/g, "&amp")
     };
-});
-
-router.post('/removeItem', (req, res) => {
-   
-    console.log("removing..."+req.body.id);
-    console.log(req.body.id);
-    db.collection('items').deleteOne({ '_id': ObjectId(req.body.id)})//, 
     
-    // (err,result)=>{
-    //     if (err) return console.log(err);
-        
-    //     // notify successful add 
-    //     console.log('changed!')
-    //     res.json('success');
-    // };
+    db.collection('items').updateOne(
+        { '_id': ObjectId(req.body.id)}, 
+        { $set: {'itemName': theItem.name, 'itemPrice':theItem.price, 'itemQuantity':theItem.quantity} }
+    );
 });
 
+// remove an existing item
+router.post('/removeItem', (req, res) => {
+    
+    // no need to worry about input sanitation
+    db.collection('items').deleteOne({ '_id': ObjectId(req.body.id)});
+});
+
+// add a new item
 router.post('/addItem', (req, res) => {
     
+    // create the new item with input sanitation
     let myItem={
-        'itemName': req.body.name,
-        'itemPrice': req.body.price,
-        'itemQuantity': req.body.quantity,
-        'imageLink': req.body.link
-    }
-    console.log(myItem);
-    //isert the new item information into the collection
+        'itemName': req.body.name.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/&/g, "&amp"),
+        'itemPrice': req.body.price.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/&/g, "&amp"),
+        'itemQuantity': req.body.quantity.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/&/g, "&amp"),
+        'imageLink': req.body.link.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/&/g, "&amp")
+    };
+
+    // isert the new item information into the collection
     db.collection('items').insertOne(myItem, (err,result) =>{
         if (err) return console.log(err);
     });

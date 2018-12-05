@@ -28,8 +28,10 @@ export class ItemsComponent implements OnInit {
   selectionStars=[];
 
   /**
-   * Inject queryService for getting items from DB
+   * Inject queryService for getting items from DB, and others
    * @params: queryService
+   * @params: authService
+   * @params: tostr
    **/ 
   constructor(
     private queryService: QueryService, 
@@ -41,80 +43,108 @@ export class ItemsComponent implements OnInit {
   }
   
   /**
-   * This function stops a user from commenting on an item if they have already done so before.
+   * Checks if the ratings of the currently selected item include an entry from the current user
   **/ 
   userCommented(){
+    
     for(var one of this.singleItemRatings){
       if(this.authService.isAuthenticated()){
         if (one.userEmail==this.authService.currentUser.email){
-           return true;
+           return true; // comment found - user has commented on this item
         }
       }
     }
-    return false;
+    return false; // user has not commented on this item
   }
   
+  /**
+   * Modify an item's details (Manager only)
+   **/
   modifyItem(id, name, quantity, price){
+    
+    // create the item object
     let item = {
       'id':id,
       'name': name,
       'quantity': quantity,
       'price': price
     }
+    
+    // send the item object to query service
     this.queryService.postItemUpdate(item)
     .subscribe((data)=>{
       console.log(data);
-      
     });
+    
+    // successfully modified item
     this.tostr.success('Item updated!', 'Success!');
   }
   
+  /**
+   * Remove/delete an item (Manager only)
+   **/
   removeItem(id){
+    
     this.queryService.postRemoveItem(id)
     .subscribe((data)=>{
       console.log(data);
-      
     });
+    
+    // successfully removed item
     this.tostr.warning('Item removed!', 'Success!');
 
   }
   
+  /**
+   * Add a new item (Manager only)
+   **/
   addItem(name,price,quantity,imageLink){
+    
+    // create the item object
     let newItem={
       'name': name,
       'price': price,
       'quantity': quantity,
       'link': imageLink
-    }
-    console.log(newItem);
-    
+    };
+
+    // send the item object to the query service
     this.queryService.postAddItem(newItem).subscribe((data)=>{
       console.log(data);
     });
+    
+    // successfully added item
     this.tostr.success('Item added!', 'Success!');
   }
   
-  // updates the arrays for items and item details
+  /**
+   * Get up-to-date information about items and their ratings
+   **/
   getItems(){
+    
+    // reset both arrays
     this.items=[];
     this.ratings=[];
+    
+    // call the getItems function from the query service
     this.queryService.getItems()
     .subscribe((data)=>{
-      
+      // push all items to item array
       for(var x in data){
         this.items.push(data[x]);
       }
        
     })
     
+    //call the get getRatings function from the query service
     this.queryService.getRatings()
     .subscribe((data)=>{
-      
+      // push all items to ratings array
       for(var x in data){
         this.ratings.push(data[x]);
       }
        
-    })
+    });
   }
   
 
@@ -123,7 +153,6 @@ export class ItemsComponent implements OnInit {
    **/
   showDetails(id){
    
-    
     // close item details (if click is on the opened item)
     if (this.detailedItemID==id){
       this.detailedItemID="";
@@ -159,31 +188,42 @@ export class ItemsComponent implements OnInit {
       
   }
 
+  // do not display the item if it's stock is below 1 (i.e no more in stock)
   checkStock(itemStock){
     var stock = parseFloat(itemStock);
     if (stock<1){
-      return false
+      return false;
     }
     return true;
   }
+  
+  
   /**
    * Called when user submits a rating and comment
    **/
   onSubmit(entry,itemId){
     
+    // input validation
     if (parseFloat(entry.value.rate)>5||parseFloat(entry.value.rate)<0){
       alert('Invalid Rating! Must be between 0 and 5 stars');
-      
       return;
     }
     
+    // confirmation
     if (!confirm("Add this comment?")){
       return;
     }
+    
+    // comment shown to users by default
     var hidden=false;
+    
+    // get the poster's email
     var userEmail = this.authService.currentUser.email;
+    
+    // send the comment information to the query service
     this.queryService.postComment(entry,userEmail,itemId,hidden);
-    //this.getItems();
+    
+    // hide the item (minimize, show less detail)
     this.showDetails(this.detailedItemID);
   }
   
@@ -208,9 +248,6 @@ export class ItemsComponent implements OnInit {
       numAltered=Math.round(numAltered);
     }
     
-    // update DOM
-    //(<HTMLInputElement>document.getElementById('ratingy')).value=numAltered.toString();
-    
     // show the number of stars associeted with the current rating
     this.selectionStars=[]; // reset the number of stars
     if(!isNaN(numAltered)){
@@ -219,7 +256,11 @@ export class ItemsComponent implements OnInit {
     return;
   }
   
+  /**
+   * Mark a comment as visible (Manager only)
+   **/ 
   showComment(id){
+    
     this.queryService.postCommentStatus(id, false)
     .subscribe((data)=>{
     
@@ -227,6 +268,9 @@ export class ItemsComponent implements OnInit {
     this.tostr.success('Comment shown!', 'Success!');
   }
   
+  /**
+   * Mark a comment as hidden (Manager only)
+   **/ 
   hideComment(id){
     this.queryService.postCommentStatus(id, true)
     .subscribe((data)=>{

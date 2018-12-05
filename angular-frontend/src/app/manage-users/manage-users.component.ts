@@ -65,12 +65,8 @@ export class ManageUsersComponent implements OnInit {
    * Disable a user in firebase db
    **/
   disableUser(email){
-    console.log("Disabling user");
-    console.log(email)
-    //this.getUser(email);
     this.queryService.postStatus(email,true)
     .subscribe((data)=>{
-        //this.getAll();
     });
     
   }
@@ -79,8 +75,6 @@ export class ManageUsersComponent implements OnInit {
    * Enable a user in firebase db
    **/
   enableUser(email){
-    console.log("Enabling user");
-    //this.getUser(email);
     this.queryService.postStatus(email,false)
     .subscribe((data)=>{
         //this.getAll();
@@ -95,8 +89,6 @@ export class ManageUsersComponent implements OnInit {
     this.queryService.getSingleUser(email)
     .subscribe((data)=>{
       this.thisUser=data;
-      console.log(this.thisUser.email);
-      
     });
     
   }
@@ -107,9 +99,9 @@ export class ManageUsersComponent implements OnInit {
   makeManager(email){
     this.queryService.postManager(email)
     .subscribe((data)=>{
-        //this.getAll();
+      
     });
-    return;
+    
   }
 
 }
