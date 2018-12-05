@@ -19,7 +19,9 @@
     					<div class="dropdown-menu dropdown-menu right" aria-labelledby="navbarDropdownMenuLink">
     						<button class="btn dropdown-item" href="#about1234">About us </button>
     						<div class="dropdown-divider">
-    						</div>  <button class="btn dropdown-item signout" (click)='loginRedirect()' >Login </button>
+    						</div>  
+    						<button class="btn dropdown-item signout" (click)='loginRedirect()' >Login </button>
+    						<button routerLink="/policies" class="btn dropdown-item">Policies</button>
     					</div>
     				</li>
     			</ul>
@@ -54,6 +56,7 @@
     						  <button class="btn dropdown-item signout" (click)="signOut()" >
     						    <span class="glyphicon glyphicon-log-out"></span> Sign out {{authService.currentUser.email}} 
     						  </button>
+    						  <button routerLink="/policies" class="btn dropdown-item">Policies</button>
     					</div>
     				</li>
     			

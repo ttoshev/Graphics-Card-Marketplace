@@ -1,3 +1,6 @@
-<p>
-  cart works!
-</p>
+<h4>CART</h4>
+<ul *ngIf="items">
+    <li *ngFor="let item of items">
+        {{item}}
+    </li>
+</ul>

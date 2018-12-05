@@ -1,0 +1,39 @@
+<div>
+    <h1 class="myHeader">Cards, Cards, Cards</h1>
+    <div class="rightened"></div>
+</div>
+
+<div class="bgnd">
+    <div>
+        <div *ngIf="this.authService.isManager()">
+            <p>What the report is about:</p>
+            <input #Title type="text" value="Comment/Collection...">
+            <br>
+            <br>
+            <p>Reason for report (Description):</p>
+            <input #Desc type="text" value="Write something..."> 
+            <br>
+            <br>
+
+            <span>
+                <button type="button" class="btn half-size" (click)="submit(Title.value, Desc.value)">Submit report</button>
+                <br>
+            </span>
+        <div>
+    </div>
+    <div *ngIf="this.authService.isManager()">
+        <p>Here are all the takedown request/complaints sent in by users. Already logged for you, {{this.authService.currentUser.email}}!</p>
+        <p>Feel free to add these to any external logging that you feel the need to.</p>
+        <h4>INSTRUCTIONS:</h4>
+        <ul>
+            <li>To hide a comment from view, go to the homepage, select the item you whose comments you would like to analyze, and click hide comment.</li>
+            <li>The same can be done in reverse for showing comments</li>
+            <li> You can add, modify or delete items from the homepage or your profile page</li>
+        </ul>
+        <div *ngFor="let complaint of complaints">
+            <h4>Complaint by: {{complaint.email}}</h4>
+            <h5>Title: {{complaint.title}}</h5>
+            <p>{{complaint.description}}</p>
+        </div>
+    </div>
+</div>

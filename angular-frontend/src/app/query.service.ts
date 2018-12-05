@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders} from '@angular/common/http';
-
+import { CartComponent } from './cart/cart.component';
 
 
 /**
@@ -13,6 +13,7 @@ import { HttpClient, HttpHeaders} from '@angular/common/http';
   providedIn: 'root'
 })
 export class QueryService {
+  inCart=[];
   // url
   myURL = 'http://se3316-ttoshev-lab5-ttoshev.c9users.io:8081/api/';
    //http header options
@@ -22,8 +23,16 @@ export class QueryService {
       })
   };
 
-  constructor(private http : HttpClient) {
+  constructor(private http : HttpClient, private cartComponent:CartComponent) {
     
+  }
+  
+  addToCart(name){
+    this.cartComponent.addToCart(name);
+  }
+  
+  getCart(){
+    return this.inCart;
   }
   
   /**
@@ -165,5 +174,19 @@ export class QueryService {
    **/ 
   postAddItem(anItem){
     return this.http.post(this.myURL+'addItem',anItem,this._options);
+  }
+  
+  addComplaint(email,title,description){
+    let aComplaint={
+      'email':email,
+      'title':title,
+      '_description': description
+    }
+    return this.http.post(this.myURL+'Complaint', aComplaint,this._options);
+  }
+  
+  getComplaints(){
+    return this.http.get(this.myURL+'Complaint');
+
   }
 }

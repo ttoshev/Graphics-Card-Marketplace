@@ -6,6 +6,10 @@ import { ProfileComponent } from './profile-component/profile-component.componen
 import { SignupComponent } from './signup/signup.component'
 import { HomepageComponent } from './homepage/homepage.component'
 import { ManageUsersComponent } from './manage-users/manage-users.component'
+import { PoliciyComponent } from './policiy/policiy.component'
+import { CartComponent } from './cart/cart.component';
+import { ComplaintsComponent } from './complaints/complaints.component'
+
 
 
 const routes: Routes = [
@@ -15,7 +19,10 @@ const routes: Routes = [
   { path: 'signup', component: SignupComponent },
   { path: 'profile', component: ProfileComponent },
   { path: 'home', component: HomepageComponent },
-  { path: 'manageUsers', component: ManageUsersComponent }
+  { path: 'manageUsers', component: ManageUsersComponent },
+  { path: 'policies', component: PoliciyComponent },
+  { path: 'complaints', component: ComplaintsComponent },
+  { path: 'cart', component: CartComponent }
 
 
 ];

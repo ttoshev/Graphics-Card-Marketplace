@@ -25,6 +25,7 @@
     						<button class="btn dropdown-item" (click)='showAboutUs()'>About us </button>
     						<div class="dropdown-divider">
     						</div>  <button class="btn dropdown-item signout" (click)='loginRedirect()' >Login </button>
+    						<button routerLink="/policies" class="btn dropdown-item">Policies</button>
     					</div>
     					  
     				</li>
@@ -72,6 +73,9 @@
     						  <button class="btn dropdown-item signout" (click)="signOut()" >
     						    <span class="glyphicon glyphicon-log-out"></span> Sign out {{authService.currentUser.email}} 
     						  </button>
+    						  <button routerLink="/policies" class="btn dropdown-item">Policies</button>
+    						  <button routerLink="/complaints" class="btn dropdown-item">Report...</button>
+
     						</div>
     					</div>
             </li>

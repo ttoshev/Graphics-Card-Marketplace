@@ -24,6 +24,8 @@ import { ToastrModule } from 'ngx-toastr';
 import { CartComponent } from './cart/cart.component';
 import { AboutComponent } from './about/about.component';
 import { ManageUsersComponent } from './manage-users/manage-users.component';
+import { PoliciyComponent } from './policiy/policiy.component';
+import { ComplaintsComponent } from './complaints/complaints.component';
 
 const firebaseConfig = {
   apiKey: "AIzaSyBrb05-WjyJQxTDkZbFQzB1p2nVXMyIAI8",
@@ -45,7 +47,9 @@ const firebaseConfig = {
     ItemsComponent,
     CartComponent,
     AboutComponent,
-    ManageUsersComponent
+    ManageUsersComponent,
+    PoliciyComponent,
+    ComplaintsComponent
   ],
   imports: [
     BrowserModule,
@@ -60,7 +64,7 @@ const firebaseConfig = {
     CommonModule,
     ToastrModule.forRoot()
   ],
-  providers: [AuthService],
+  providers: [AuthService, CartComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { 
